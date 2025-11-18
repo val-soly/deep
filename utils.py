@@ -88,6 +88,7 @@ def plot_results(losses_train, losses_test, acc_train, acc_test, args):
     plt.legend()
     plt.tight_layout()
     plt.savefig(os.path.join(args.path, 'results.png'))
+    plt.close()
 
 
 def visualize_results(x, y, model, device, args, attack=None):
@@ -112,5 +113,4 @@ def visualize_results(x, y, model, device, args, attack=None):
         plt.savefig(os.path.join(args.path, f'examples_{attack.name}.png'))
     else:
         plt.savefig(os.path.join(args.path, 'examples.png'))
-    plt.show()
-    
+    plt.close()

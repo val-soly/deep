@@ -66,6 +66,7 @@ def main(args):
     loss, acc = test_model(model, test_loader, device)
     losses_test.append(loss)
     acc_test.append(acc)
+    min_loss= 10**10
 
     # Initialize a progress bar for tracking the progress of epochs
     pbar = tqdm.trange(args.epochs)
@@ -95,6 +96,10 @@ def main(args):
         losses_test.append(loss)
         acc_test.append(acc)
 
+        if loss < min_loss:
+            best_model = model
+            min_loss = loss
+
         # Update the epoch progress bar with the test loss and accuracy
         pbar.set_description(f'Loss test: {loss:.4f}, Acc test: {acc:.2f}, Best Acc test: {acc_test[np.argmin(losses_test)]:.2f}')
 
@@ -102,8 +107,8 @@ def main(args):
         plot_results(losses_train, losses_test, acc_train, acc_test, args)
 
         # To do 6
-        save_model(model, args)
-        visualize_results(x_test, y_test, model, device, args)
+        save_model(best_model, args)
+        visualize_results(x_test, y_test, best_model, device, args)
 
     # Save the final results 
     with open(os.path.join(args.path, 'results.txt'), 'a') as f:
