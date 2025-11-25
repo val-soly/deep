@@ -46,7 +46,7 @@ class FastGradientSignMethod:
         delta.data = self.eps * delta.grad.data.sign()
 
         # clamp pour rester dans l’intervalle [0,1]
-        perturbation = torch.clamp(x + delta, 0, 1)
+        perturbation = delta.data
         return perturbation
 
 class ProjectedGradientDescent:
@@ -95,11 +95,17 @@ class ProjectedGradientDescent:
         # iteratively compute adversarial perturbations
         for t in range(self.num_iter):
             ## To do 16 
-            break
+            loss = nn.CrossEntropyLoss()(self.model(x + delta), y)
+            loss.backward()
+            
+            # ascend
+            delta.data = delta.data + self.alpha * delta.grad.data.sign()
 
+            # projection
+            delta.data = torch.clamp(delta.data, -self.eps, self.eps)
 
-
-            ## Reset the gradients of the model
+           # clean grads
             delta.grad.zero_()
+ #           self.model.zero_grad()
 
         return delta.detach()
