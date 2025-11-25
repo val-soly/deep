@@ -42,7 +42,11 @@ class FastGradientSignMethod:
         ## apply one step of sign gradient ascent to the input
 
         ## To do 12
-        raise NotImplementedError 
+        # apply one step of sign gradient ascent to the input
+        delta.data = self.eps * delta.grad.data.sign()
+
+        # clamp pour rester dans l’intervalle [0,1]
+        perturbation = torch.clamp(x + delta, 0, 1)
         return perturbation
 
 class ProjectedGradientDescent:

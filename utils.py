@@ -98,7 +98,8 @@ def visualize_results(x, y, model, device, args, attack=None):
         x = torch.clamp(x + delta, 0, 1)
     with torch.no_grad():
         y_pred = model(x).argmax(dim=1)
-    x, y, y_pred = x.cpu().numpy(), y.cpu().numpy(), y_pred.detach().cpu().numpy()
+    #x, y, y_pred = x.cpu().numpy(), y.cpu().numpy(), y_pred.detach().cpu().numpy()
+    x, y_pred = x.detach().cpu().numpy(), y_pred.detach().cpu().numpy()
     f, ax = plt.subplots(5, 5, sharex=True, sharey=True, figsize=(5*2, 5*1.3))
     for i in range(5):
         for j in range(5):
